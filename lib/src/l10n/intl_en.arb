@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "appTitle": "Sport App",
+  "@appTitle": {
+    "description": "Main app title"
+  },
+  "welcome": "Welcome!!",
+  "invalid_credendials": "Invalid credentials",
+  "login": "login",
+  "signup": "Sign up",
+  "password_input": "Password",
+  "email_input": "Email",
+  "no_internet": "There is not internet, please turn it on",
+  "server_error": "Server error, try again later",
+  "api_waiting_loader": "Please wait",
+  "api_loader_title": "Message"
+}

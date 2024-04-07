@@ -1,0 +1,17 @@
+{
+  "@@locale": "es",
+  "appTitle": "Proyecto final",
+  "@appTitle": {
+    "description": "Titulo principal"
+  },
+  "welcome": "bienvenido",
+  "invalidCredendials": "Credenciales invalidas",
+  "login": "Iniciar sesión",
+  "signup": "Registrarme",
+  "password_input": "Contrasena",
+  "email_input": "Correo Electónico",
+  "no_internet": "No hay internet, porfavor acive la opción",
+  "server_error": "Error en el servidor, intente mas tarde",
+  "api_waiting_loader": "Por favor espere",
+  "api_loader_title": "Mensaje"
+}
