@@ -3,6 +3,7 @@ import 'package:proyecto_final_movil/src/features/authentication/login.dart';
 import 'package:proyecto_final_movil/src/widgets/screen_size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginRegister extends StatefulWidget {
   const LoginRegister({
@@ -16,6 +17,14 @@ class LoginRegister extends StatefulWidget {
 }
 
 class _LoginRegisterState extends State<LoginRegister> {
+  static const String register_url = String.fromEnvironment('REGISTER_URL', defaultValue: 'http://amazon.com');
+
+  _launchURL() async {
+    final Uri url = Uri.parse(register_url);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not open register url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +105,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                               height: SizeConfig.defaultSize * 10,
                               minWidth: MediaQuery.of(context).size.width,
                               child: OutlinedButton(
-                                onPressed: () => {},
+                                onPressed: _launchURL,
                                 style: OutlinedButton.styleFrom(
                                   padding: const EdgeInsets.fromLTRB(40, 0, 40, 0)
                                 ),

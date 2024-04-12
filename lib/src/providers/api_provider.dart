@@ -43,7 +43,7 @@ class ApiProvider {
   }
 
 
-  Future<dynamic> login(BuildContext context, String email, String password) async {
+  Future<dynamic> login(BuildContext context, http.Client client, String email, String password) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show(
       barrierDismissible: true,
@@ -51,7 +51,7 @@ class ApiProvider {
       hideValue: true,
     );
     try {
-      final response = await http.post(
+      final response = await client.post(
           Uri.parse("$url/login"),
           body: jsonEncode(<String, String>{
             'email': email,
@@ -61,26 +61,39 @@ class ApiProvider {
 
       if (!context.mounted) return;
 
+      dynamic result, jsonResponse;
       switch (response.statusCode) {
         case 200:
         case 201:
           pd.close();
-          final result = jsonDecode(response.body);
-          final jsonResponse = {'success': true, 'response': result};
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
           _saveToken(jsonResponse['response']['token']);
           return jsonResponse;
         case 401:
           pd.close();
           _dialogBuilder(context, AppLocalizations.of(context)!.invalid_credendials);
-          final jsonResponse = {'success': true, 'response': ''};
+          jsonResponse = {'success': true, 'response': ''};
           return jsonResponse;
+        case 422:
+          pd.close();
+          _dialogBuilder(context, AppLocalizations.of(context)!.invalid_credendials);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          pd.close();
+          _dialogBuilder(context, AppLocalizations.of(context)!.invalid_credendials);
       }
     } on SocketException {
       pd.close();
       _dialogBuilder(context, AppLocalizations.of(context)!.no_internet);
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
     } on HttpException {
       pd.close();
       _dialogBuilder(context, AppLocalizations.of(context)!.server_error);
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:proyecto_final_movil/src/widgets/screen_size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
 import 'package:proyecto_final_movil/src/features/menu/dashboard.dart';
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -23,8 +24,9 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> _handleLogin(context) async {
     if (emailTextController.text.isNotEmpty && passwordTextController.text.isNotEmpty ) {
+      final client = http.Client();
       dynamic res = await _apiProvider.login(
-          context, emailTextController.text, passwordTextController.text);
+          context, client, emailTextController.text, passwordTextController.text);
 
       if (res['success'] == false) {
         //show error
@@ -97,6 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
+                              key: const Key('email_input'),
                               controller: emailTextController,
                               decoration: InputDecoration(
                                 labelText: AppLocalizations.of(context)!.email_input,
@@ -121,6 +124,7 @@ class _LoginFormState extends State<LoginForm> {
                               height: SizeConfig.defaultSize * 2,
                             ),
                             TextFormField(
+                              key: const Key('password_input'),
                               obscureText: true,
                               controller: passwordTextController,
                               decoration: InputDecoration(

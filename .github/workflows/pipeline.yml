@@ -1,0 +1,28 @@
+name: Servicio metricas
+on:
+  push:
+    branches:
+      - main
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    if: contains(github.event.head_commit.message, '#deploy')
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: Generate release tag
+        id: generate_release_tag
+        uses: amitsingh-007/next-release-tag@v5.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: 'v'
+          tag_template: 'yyyy.mm.dd.i'
+      - name: Create Release
+        id: release_tag
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.generate_release_tag.outputs.next_release_tag }}
+          generateReleaseNotes: true
+          makeLatest: true
+        
