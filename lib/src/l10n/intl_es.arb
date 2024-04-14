@@ -9,7 +9,7 @@
   "login": "Iniciar sesión",
   "signup": "Registrarme",
   "password_input": "Contrasena",
-  "email_input": "Correo Electónico",
+  "email_input": "Correo Electrónico",
   "no_internet": "No hay internet, porfavor acive la opción",
   "server_error": "Error en el servidor, intente mas tarde",
   "api_waiting_loader": "Por favor espere",

@@ -17,7 +17,7 @@ class LoginRegister extends StatefulWidget {
 }
 
 class _LoginRegisterState extends State<LoginRegister> {
-  static const String registerUrl = String.fromEnvironment('REGISTER_URL', defaultValue: 'http://amazon.com');
+  static const String registerUrl = String.fromEnvironment('REGISTER_URL', defaultValue: 'http://pf-front-app.s3-website-us-east-1.amazonaws.com/');
 
   _launchURL() async {
     final Uri url = Uri.parse(registerUrl);
