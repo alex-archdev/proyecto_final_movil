@@ -25,13 +25,6 @@ flutter build --dart-define-from-file="lib/.env"
 
 ## pruebas
 
-si se van a hacer peticiones http lo mejor es usar mocks, el paquete Mockito genera mocks http, se debe lanzar el siguiente comando cada vez que se generen nuevos tests que involucren consultas http
-```
-dart run build_runner build
-```
-
-fuente: https://docs.flutter.dev/cookbook/testing/unit/mocking
-
 ejecutar el siguiente comando
 ```
 flutter test test/<filename>.dart
