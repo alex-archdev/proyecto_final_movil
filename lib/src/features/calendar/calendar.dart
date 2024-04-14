@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:proyecto_final_movil/src/providers/locale_provider.dart';
-import 'package:provider/provider.dart';
 
 class Calendar extends StatelessWidget {
   const Calendar({super.key});

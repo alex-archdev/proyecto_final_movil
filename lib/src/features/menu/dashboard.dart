@@ -4,6 +4,7 @@ import 'package:proyecto_final_movil/src/features/calendar/calendar.dart';
 import 'package:proyecto_final_movil/src/features/sport_sesion/sport_session.dart';
 import 'package:proyecto_final_movil/src/features/authentication/login_register.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ValueNotifier<int> viewIndex = ValueNotifier<int>(0);
 
@@ -19,12 +20,19 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  Future<void> deletePref() async {
+    final pref = await SharedPreferences.getInstance();
+    pref.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return PopScope(
       canPop: false,
       child: Scaffold(
+        key: const Key('dashboard'),
         appBar: AppBar(
           // TRY THIS: Try changing the color here to a specific color (to
           // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -39,6 +47,7 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
         drawer: Drawer(
+          key: const Key('menuDrawer'),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -46,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
                   decoration: BoxDecoration(
                     color: Colors.purple
                   ),
-                  child: Text('drawer header'),
+                  child: Text('Sport App'),
               ),
               ListTile(
                 leading: const Icon(
@@ -69,11 +78,13 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
               ListTile(
+                key: const Key('logout'),
                 leading: const Icon(
                     Icons.home
                 ),
                 title: const Text('salir'),
                 onTap: () => {
+                  deletePref(),
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginRegister()),

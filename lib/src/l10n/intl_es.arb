@@ -13,5 +13,8 @@
   "no_internet": "No hay internet, porfavor acive la opción",
   "server_error": "Error en el servidor, intente mas tarde",
   "api_waiting_loader": "Por favor espere",
-  "api_loader_title": "Mensaje"
+  "api_loader_title": "Mensaje",
+  "empty_input_field": "El campo no puede ser vacio",
+  "short_input_field": "El campo es muy corto",
+  "invalid_email_field": "Email no es valido"
 }

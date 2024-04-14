@@ -7,16 +7,11 @@ import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:http/http.dart' as http;
 
 class ApiProvider {
-  static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://localhost:3000');
+  static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://k8s-ekssport-sportapp-a5d22e537b-139954850.us-east-1.elb.amazonaws.com');
 
   Future<void> _saveToken(token) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('token', token);
-  }
-
-  Future<String?> _getToken(token) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getString('token');
   }
 
   Future<void> _dialogBuilder(BuildContext context, String message) {
@@ -51,14 +46,18 @@ class ApiProvider {
       hideValue: true,
     );
     try {
+      String basePassword = base64.encode(utf8.encode(password));
       final response = await client.post(
-          Uri.parse("$url/login"),
+          Uri.parse("$url/registro-usuarios/login/deportista"),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+          },
           body: jsonEncode(<String, String>{
             'email': email,
-            'password': password
+            'contrasena': basePassword
           })
       );
-
       if (!context.mounted) return;
 
       dynamic result, jsonResponse;
@@ -83,6 +82,8 @@ class ApiProvider {
         default:
           pd.close();
           _dialogBuilder(context, AppLocalizations.of(context)!.invalid_credendials);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
       }
     } on SocketException {
       pd.close();

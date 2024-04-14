@@ -17,10 +17,10 @@ class LoginRegister extends StatefulWidget {
 }
 
 class _LoginRegisterState extends State<LoginRegister> {
-  static const String register_url = String.fromEnvironment('REGISTER_URL', defaultValue: 'http://amazon.com');
+  static const String registerUrl = String.fromEnvironment('REGISTER_URL', defaultValue: 'http://amazon.com');
 
   _launchURL() async {
-    final Uri url = Uri.parse(register_url);
+    final Uri url = Uri.parse(registerUrl);
     if (!await launchUrl(url)) {
       throw Exception('Could not open register url');
     }
@@ -124,17 +124,24 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: SizeConfig.defaultSize * 26),
-                    height: SizeConfig.defaultSize * 5,
-                    width: SizeConfig.defaultSize * 20,
-                    child: const Center(
-                      child: Text(
-                        'SportApp',
-                        style: TextStyle(
-                            color: Colors.deepPurple,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25),
-                      ),
+                    margin: EdgeInsets.only(top: SizeConfig.defaultSize * 28),
+                    child: const Wrap(
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.keyboard_double_arrow_right_outlined,
+                          color: Colors.deepPurple,
+                          size: 56,
+                        ),
+                        Text(
+                          'SportApp',
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25),
+                        ),
+                      ],
                     ),
                   ),
                 ),

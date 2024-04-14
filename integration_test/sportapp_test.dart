@@ -1,19 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:proyecto_final_movil/src/providers/api_provider.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/main.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 
-// class MockClient extends Mock implements http.Client {}
-
-@GenerateMocks([http.Client])
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -72,22 +63,9 @@ void main() {
       );
 
       const String email = 'test@email.com';
-      const String password = '123456';
-
-      // final ApiProvider apiProvider = ApiProvider();
-      //
-      // final client = MockClient();
-      // when(client.post(
-      //   Uri.parse('http://localhost'),
-      //   body: jsonEncode(<String, String>{
-      //     'email': email,
-      //     'password': password
-      //   })
-      // )).thenAnswer((_) async => http.Response('{"success": false}', 400));
+      const String password = '12345678';
 
       await tester.pumpWidget(widget);
-
-      final BuildContext context = tester.element(find.byType(MyApp));
 
       final but_1 = find.text('login');
       await tester.tap(but_1);
@@ -101,16 +79,98 @@ void main() {
       await tester.enterText(find.byKey(const Key('email_input')), email);
       await tester.pumpAndSettle(const Duration(seconds: 1));
       await tester.enterText(find.byKey(const Key('password_input')), password);
-      await tester.pumpAndSettle(const Duration(seconds: 3));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      final but_2 = find.text('login');
-      await tester.tap(but_2);
+      await tester.tap(but_1);
 
-      // dynamic res = await apiProvider.login(
-      //     context, client, email, password);
-
-      await tester.pumpAndSettle(const Duration(seconds: 3));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(find.byType(AlertDialog), findsOneWidget);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+    });
+
+    testWidgets('login good credentials', (WidgetTester tester) async {
+      // Create the widget by telling the tester to build it.
+      final widget = makeTesteableWidget(
+        child: const MyApp(),
+      );
+
+      final scaffoldKey = GlobalKey<ScaffoldState>();
+      const displayName = "SportApp";
+
+      const String email = 'axelbeny@gmail.com';
+      const String password = 'deportista123456';
+
+      await tester.pumpWidget(widget);
+
+      final but_1 = find.text('login');
+      await tester.tap(but_1);
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.text('Password'), findsOneWidget);
+      expect(find.text('Email'), findsOneWidget);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.enterText(find.byKey(const Key('email_input')), email);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.enterText(find.byKey(const Key('password_input')), password);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      await tester.tap(but_1);
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            key: scaffoldKey,
+            drawer: const Text(displayName),
+          ),
+        ),
+      );
+
+      scaffoldKey.currentState?.openDrawer();
+      await tester.pump();
+
+      expect(find.text(displayName), findsOneWidget);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+    });
+
+    testWidgets('logout', (WidgetTester tester) async {
+      // Create the widget by telling the tester to build it.
+      final widget = makeTesteableWidget(
+        child: const MyApp(),
+      );
+
+      const String email = 'axelbeny@gmail.com';
+      const String password = 'deportista123456';
+
+      await tester.pumpWidget(widget);
+
+      final but_1 = find.text('login');
+      await tester.tap(but_1);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.enterText(find.byKey(const Key('email_input')), email);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.enterText(find.byKey(const Key('password_input')), password);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      await tester.tap(but_1);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      final drawer = find.byTooltip('Open navigation menu');
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(drawer);
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(find.byKey(const Key('logout')));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      expect(find.text('login'), findsOneWidget);
+
       await tester.pumpAndSettle(const Duration(seconds: 1));
     });
   });

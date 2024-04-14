@@ -13,5 +13,8 @@
   "no_internet": "There is not internet, please turn it on",
   "server_error": "Server error, try again later",
   "api_waiting_loader": "Please wait",
-  "api_loader_title": "Message"
+  "api_loader_title": "Message",
+  "empty_input_field": "Field can not be empty",
+  "short_input_field": "Field is too short",
+  "invalid_email_field": "Invalid email"
 }
