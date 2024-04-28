@@ -16,5 +16,19 @@
   "api_loader_title": "Message",
   "empty_input_field": "Field can not be empty",
   "short_input_field": "Field is too short",
-  "invalid_email_field": "Invalid email"
+  "invalid_email_field": "Invalid email",
+  "button_logout": "Logout",
+  "menu_sport_plan_page": "Sport plans",
+  "menu_sport_session_page": "Sport session",
+  "menu_sport_calendar": "Calendar",
+  "schedule_event_title": "Schedule event",
+  "event_description": "Description",
+  "event_init_time": "Init time",
+  "event_end_time": "End time",
+  "event_date": "Date",
+  "plan_name": "Plan name",
+  "active_session_dialog_message": "You must stop the exercise",
+  "active_session_start_button": "Start",
+  "active_session_pause_button": "Pause",
+  "active_session_stop_button": "Stop"
 }

@@ -29,3 +29,9 @@ ejecutar el siguiente comando
 ```
 flutter test test/<filename>.dart
 ```
+
+## servidor local
+android escucha lo que ocurre con localhost en la siquiente ip
+```
+http://10.0.2.2:5000
+```

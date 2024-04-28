@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_movil/src/features/sport_plan/sport_plan.dart';
+import 'package:proyecto_final_movil/src/features/sport_sesion/session_plan.dart';
 import 'package:proyecto_final_movil/src/widgets/screen_size_config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/features/calendar/calendar.dart';
-import 'package:proyecto_final_movil/src/features/sport_sesion/sport_session.dart';
 import 'package:proyecto_final_movil/src/features/authentication/login_register.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,22 +60,35 @@ class _DashboardState extends State<Dashboard> {
                   child: Text('Sport App'),
               ),
               ListTile(
+                key: const Key('plan'),
                 leading: const Icon(
-                  Icons.home
+                  Icons.accessibility_new
                 ),
-                title: const Text('pagina 1'),
+                title: Text(AppLocalizations.of(context)!.menu_sport_plan_page),
                 onTap: () => {
                   viewIndex.value = 0,
                   Navigator.pop(context)
                 },
               ),
               ListTile(
+                key: const Key('session'),
                 leading: const Icon(
-                    Icons.home
+                    Icons.splitscreen_outlined
                 ),
-                title: const Text('pagina 2'),
+                title: Text(AppLocalizations.of(context)!.menu_sport_session_page),
                 onTap: () => {
                   viewIndex.value = 1,
+                  Navigator.pop(context)
+                },
+              ),
+              ListTile(
+                key: const Key('calendar'),
+                leading: const Icon(
+                    Icons.calendar_month
+                ),
+                title: Text(AppLocalizations.of(context)!.menu_sport_calendar),
+                onTap: () => {
+                  viewIndex.value = 2,
                   Navigator.pop(context)
                 },
               ),
@@ -82,7 +97,7 @@ class _DashboardState extends State<Dashboard> {
                 leading: const Icon(
                     Icons.home
                 ),
-                title: const Text('salir'),
+                title: Text(AppLocalizations.of(context)!.button_logout),
                 onTap: () => {
                   deletePref(),
                   Navigator.pushAndRemoveUntil(
@@ -104,9 +119,13 @@ class _DashboardState extends State<Dashboard> {
           ) {
             switch (viewIndex) {
               case 0:
+                return const SportPlan();
+              case 1:
+                return const SessionPlan();
+              case 2:
                 return const Calendar();
               default:
-                return const SportSession();
+                return const SportPlan();
             }
           }
         )

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
 import 'package:proyecto_final_movil/src/features/menu/dashboard.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_udid/flutter_udid.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -62,8 +63,9 @@ class LoginCustomFormState extends State<LoginCustomForm> {
   Future<void> _handleLogin(context) async {
     if (_loginForm.currentState!.validate()) {
       final client = http.Client();
+      final String deviceId = await FlutterUdid.udid;
       dynamic res = await _apiProvider.login(
-          context, client, _email, _password);
+          context, client, _email, _password, deviceId);
 
       if (res['success'] == false) {
         //show error
@@ -99,12 +101,11 @@ class LoginCustomFormState extends State<LoginCustomForm> {
     return null;
   }
 
-  // @override
-  // void dispose() {
-  //   emailTextController.dispose();
-  //   passwordTextController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

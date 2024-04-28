@@ -253,11 +253,27 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_udid:
+    dependency: "direct main"
+    description:
+      name: flutter_udid
+      sha256: "63384bd96203aaefccfd7137fab642edda18afede12b0e9e1a2c96fe2589fd07"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: "direct main"
+    description:
+      name: fluttertoast
+      sha256: "81b68579e23fcbcada2db3d50302813d2371664afe6165bc78148050ab94bf66"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.2.5"
   frontend_server_client:
     dependency: transitive
     description:
@@ -636,6 +652,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  simple_gesture_detector:
+    dependency: transitive
+    description:
+      name: simple_gesture_detector
+      sha256: ba2cd5af24ff20a0b8d609cec3f40e5b0744d2a71804a2616ae086b9c19d19a3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -721,6 +745,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  table_calendar:
+    dependency: "direct main"
+    description:
+      name: table_calendar
+      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:

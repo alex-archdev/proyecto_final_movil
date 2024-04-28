@@ -79,6 +79,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                         child: Column(
                           children: <Widget>[
                             ButtonTheme(
+                              key: const Key('login_btn'),
                               height: SizeConfig.defaultSize * 10,
                               minWidth: MediaQuery.of(context).size.width,
                               child: OutlinedButton(
@@ -102,6 +103,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                               height: SizeConfig.defaultSize * 1,
                             ),
                             ButtonTheme(
+                              key: const Key('signup_btn'),
                               height: SizeConfig.defaultSize * 10,
                               minWidth: MediaQuery.of(context).size.width,
                               child: OutlinedButton(

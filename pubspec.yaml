@@ -45,6 +45,10 @@ dependencies:
   go_router: ^13.2.2
   url_launcher: ^6.2.5
   email_validator: ^2.1.16
+  table_calendar: ^3.0.9
+  flutter_udid: ^3.0.0
+  fluttertoast: ^8.2.5
+
 
 dev_dependencies:
   flutter_test:

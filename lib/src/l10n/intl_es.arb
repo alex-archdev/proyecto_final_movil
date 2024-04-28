@@ -5,7 +5,7 @@
     "description": "Titulo principal"
   },
   "welcome": "bienvenido",
-  "invalidCredendials": "Credenciales invalidas",
+  "invalid_credendials": "Credenciales invalidas",
   "login": "Iniciar sesión",
   "signup": "Registrarme",
   "password_input": "Contrasena",
@@ -16,5 +16,19 @@
   "api_loader_title": "Mensaje",
   "empty_input_field": "El campo no puede ser vacio",
   "short_input_field": "El campo es muy corto",
-  "invalid_email_field": "Email no es valido"
+  "invalid_email_field": "Email no es valido",
+  "button_logout": "Salir",
+  "menu_sport_plan_page": "Planes deportivos",
+  "menu_sport_session_page": "Sesiones deportivas",
+  "menu_sport_calendar": "Calendario",
+  "schedule_event_title": "Agendar evento",
+  "event_description": "Descripcion",
+  "event_init_time": "Hora de inicio",
+  "event_end_time": "Hora de fin",
+  "event_date": "Fecha",
+  "plan_name": "Nombre del plan",
+  "active_session_dialog_message": "Primero debes detener el ejercicio",
+  "active_session_start_button": "Comenzar",
+  "active_session_pause_button": "Pausar",
+  "active_session_stop_button": "Detener"
 }
