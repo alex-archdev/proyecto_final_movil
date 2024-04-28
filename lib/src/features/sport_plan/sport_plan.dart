@@ -28,7 +28,7 @@ class _SportPlanState extends State<SportPlan> {
 
   Future<void> getActivePlans(context) async {
     final client = http.Client();
-    dynamic res = await _apiProvider.myPlans(context, client);
+    dynamic res = await _apiProvider.listOpenPlans(context, client);
 
     if (res['success'] == false) {
       log('error en la obtencion de la lista de calendario');
