@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_movil/src/providers/api_provider.dart';
 import 'package:proyecto_final_movil/src/widgets/screen_size_config.dart';
