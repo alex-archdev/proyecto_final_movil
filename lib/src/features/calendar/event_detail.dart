@@ -101,7 +101,7 @@ class _EventDetailState extends State<EventDetail> {
   Future<void> _sendMetrics(incomingData) async {
     final client = http.Client();
     dynamic data = {
-      'planId': widget.session.idPlan,
+      'planId': widget.session.idSession,
       'vo2': incomingData['vo2'],
       'ftp': incomingData['ftp']
     };
