@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import '../features/authentication/login_register.dart';
 
 class ApiProvider {
-  static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://k8s-ekssport-sportapp-a5d22e537b-1623025658.us-east-1.elb.amazonaws.com');
+  static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://k8s-ekssport-sportapp-a5d22e537b-1703746054.us-east-1.elb.amazonaws.com');
 
   Future<void> _saveToken(token) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -56,8 +56,7 @@ class ApiProvider {
     );
   }
 
-
-  Future<dynamic> login(BuildContext context, http.Client client, String email, String password, String deviceId) async {
+  Future<dynamic> login(BuildContext context, http.Client client, String email, String password) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show(
       barrierDismissible: true,
@@ -75,8 +74,7 @@ class ApiProvider {
           },
           body: jsonEncode(<String, String>{
             'email': email,
-            'contrasena': basePassword,
-            'deviceId': deviceId
+            'contrasena': basePassword
           })
       );
       if (!context.mounted) return;
@@ -97,7 +95,7 @@ class ApiProvider {
         case 401:
           pd.close();
           _dialogBuilder(context, AppLocalizations.of(context)!.invalid_credendials);
-          jsonResponse = {'success': true, 'response': ''};
+          jsonResponse = {'success': false, 'response': ''};
           return jsonResponse;
         case 422:
           pd.close();
@@ -358,6 +356,7 @@ class ApiProvider {
         case 201:
           result = jsonDecode(response.body);
           jsonResponse = {'success': true, 'response': result};
+          print(jsonResponse['response']);
           return jsonResponse;
         case 401:
           jsonResponse = {'success': false, 'response': ''};
@@ -379,9 +378,9 @@ class ApiProvider {
     }
   }
 
-  Future<dynamic> myScheduledSingleSession(BuildContext context, http.Client client, String planId) async {
+  Future<dynamic> myScheduledSingleSession(BuildContext context, http.Client client, String planId, String sesionId) async {
     try {
-      var scheduledPlansUrl = "$url/gestor-usuarios/planes/obtener_ejercicios_plan_deportista/$planId";
+      var scheduledPlansUrl = "$url/gestor-usuarios/planes/obtener_ejercicios_plan_deportista/$planId/$sesionId";
       var authToken = await _getToken() ;
       final response = await client.get(
           Uri.parse(scheduledPlansUrl),
@@ -395,6 +394,204 @@ class ApiProvider {
 
       var code = response.statusCode;
       log("url: $scheduledPlansUrl");
+      log("status: $code");
+
+      dynamic result, jsonResponse;
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
+          return jsonResponse;
+        case 401:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        case 403:
+          _deletePref(context);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    }
+  }
+
+  Future<dynamic> startSession(BuildContext context, http.Client client, dynamic data) async {
+    try {
+      var sessionUrl = "$url/metricas/sesiones/iniciar_sesion_deportiva";
+      // var sessionUrl = "http://10.0.2.2:3010/metricas/sesiones/iniciar_sesion_deportiva";
+      var authToken = await _getToken() ;
+      final response = await client.post(
+          Uri.parse(sessionUrl),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+            "authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, String>{
+            'id_sesion': data['planId'],
+            'device_id': data['deviceId']
+          })
+      );
+      if (!context.mounted) return;
+
+      var code = response.statusCode;
+      log("url: $sessionUrl");
+      log("status: $code");
+
+      dynamic result, jsonResponse;
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
+          return jsonResponse;
+        case 401:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        case 403:
+          _deletePref(context);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    }
+  }
+
+  Future<dynamic> stopSession(BuildContext context, http.Client client, dynamic data) async {
+    try {
+      var sessionUrl = "$url/metricas/sesiones/finalizar_sesion_deportiva";
+      // var sessionUrl = "http://10.0.2.2:3010/metricas/sesiones/detener_sesion_deportiva";
+      var authToken = await _getToken() ;
+      final response = await client.post(
+          Uri.parse(sessionUrl),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+            "authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, String>{
+            'id_sesion': data['planId'],
+            'fecha_inicio': data['fecha_inicio'],
+            'fecha_fin': data['fecha_fin']
+          })
+      );
+      if (!context.mounted) return;
+
+      var code = response.statusCode;
+      log("url: $sessionUrl");
+      log("status: $code");
+
+      dynamic result, jsonResponse;
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
+          return jsonResponse;
+        case 401:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        case 403:
+          _deletePref(context);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    }
+  }
+
+  Future<dynamic> sendMetric(BuildContext context, http.Client client, dynamic data) async {
+    try {
+      var metricsUrl = "$url/metricas/metric/save";
+      // var metricsUrl = "http://10.0.2.2:3010/metricas/metric/save";
+      var authToken = await _getToken() ;
+      final response = await client.post(
+          Uri.parse(metricsUrl),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+            "authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, dynamic>{
+            'session_id': data['planId'],
+            'vo2': data['vo2'],
+            'ftp': data['ftp']
+          })
+      );
+      if (!context.mounted) return;
+
+      var code = response.statusCode;
+      log("url: $metricsUrl");
+      log("status: $code");
+
+      dynamic result, jsonResponse;
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
+          return jsonResponse;
+        case 401:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        case 403:
+          _deletePref(context);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    }
+  }
+
+  Future<dynamic> getMeasures(BuildContext context, http.Client client) async {
+    try {
+      var measuresUrl = "$url/gestor-sesion-deportiva/sesiones/obtener_estadisticas_deportista";
+      // var measuresUrl = "http://10.0.2.2:3010/gestor-sesion-deportiva/sesiones/obtener_estadisticas_deportista";
+      var authToken = await _getToken() ;
+      final response = await client.get(
+          Uri.parse(measuresUrl),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+            "authorization": "Bearer $authToken"
+          }
+      );
+      if (!context.mounted) return;
+
+      var code = response.statusCode;
+      log("url: $measuresUrl");
       log("status: $code");
 
       dynamic result, jsonResponse;

@@ -8,6 +8,8 @@ import 'package:proyecto_final_movil/src/features/authentication/login_register.
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../measures/measures_report.dart';
+
 ValueNotifier<int> viewIndex = ValueNotifier<int>(0);
 
 class Dashboard extends StatefulWidget {
@@ -93,6 +95,17 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
               ListTile(
+                key: const Key('measures'),
+                leading: const Icon(
+                    Icons.calendar_month
+                ),
+                title: Text(AppLocalizations.of(context)!.menu_sport_measures),
+                onTap: () => {
+                  viewIndex.value = 3,
+                  Navigator.pop(context)
+                },
+              ),
+              ListTile(
                 key: const Key('logout'),
                 leading: const Icon(
                     Icons.home
@@ -124,6 +137,8 @@ class _DashboardState extends State<Dashboard> {
                 return const SessionPlan();
               case 2:
                 return const Calendar();
+              case 3:
+                return const MeasuresReport();
               default:
                 return const SportPlan();
             }

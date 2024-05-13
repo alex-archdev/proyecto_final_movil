@@ -21,6 +21,7 @@
   "menu_sport_plan_page": "Planes deportivos",
   "menu_sport_session_page": "Sesiones deportivas",
   "menu_sport_calendar": "Calendario",
+  "menu_sport_measures": "Estadisticas",
   "schedule_event_title": "Agendar evento",
   "event_description": "Descripcion",
   "event_init_time": "Hora de inicio",
@@ -30,5 +31,9 @@
   "active_session_dialog_message": "Primero debes detener el ejercicio",
   "active_session_start_button": "Comenzar",
   "active_session_pause_button": "Pausar",
-  "active_session_stop_button": "Detener"
+  "active_session_stop_button": "Detener",
+  "vo2_low_title": "Alerta de vo2",
+  "vo2_low_message": "Vo2 esta muy bajo",
+  "ftp_low_title": "Alerta de ftp",
+  "ftp_low_message": "Ftp esta bajo esfuerzate mas"
 }

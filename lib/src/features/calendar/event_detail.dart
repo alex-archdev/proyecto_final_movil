@@ -1,8 +1,13 @@
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/features/calendar/event_detail_dto.dart';
+import 'package:proyecto_final_movil/src/providers/api_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
+
+import '../../providers/notification_helper.dart';
 
 class EventDetail extends StatefulWidget {
   final ActiveSession session;
@@ -17,23 +22,35 @@ class EventDetail extends StatefulWidget {
 }
 
 class _EventDetailState extends State<EventDetail> {
+  final ApiProvider _apiProvider = ApiProvider();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   bool startButton = false;
   bool timerOnce = true;
   bool exerciseStop = false;
   late int minutes;
   int seconds = 0;
+  int vo2 = 0;
+  int ftp = 0;
   String isZero = '0';
+  Random rand = Random();
 
   @override
   void initState() {
     super.initState();
     minutes = widget.totalDuration;
+    LocalNotification.initialize();
+    if (context.mounted) {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        LocalNotification.showNotification(message, context);
+      });
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
     _startTimer().cancel();
+    _startSendingMetrics().cancel();
   }
 
   // Future<void> _saveActiveSession(token) async {
@@ -46,6 +63,50 @@ class _EventDetailState extends State<EventDetail> {
   //   };
   //   await pref.setString('activeSession', jsonEncode(activeSession));
   // }
+  Future<void> _startExercice() async {
+    final client = http.Client();
+    final String? deviceId = await _firebaseMessaging.getToken();
+    dynamic data = {
+      'planId': widget.session.idSession,
+      'deviceId': deviceId
+    };
+    dynamic res = await _apiProvider.startSession(context, client, data);
+  }
+
+  Future<void> _stopExercice() async {
+    final client = http.Client();
+    DateTime today = DateTime.now();
+    dynamic data = {
+      'planId': widget.session.idSession,
+      'fecha_inicio': today.toString(),
+      'fecha_fin': today.toString()
+    };
+    dynamic res = await _apiProvider.stopSession(context, client, data);
+    dynamic food = {};
+    if (res['success'] == false) {
+      print('error en la obtencion de la lista de calendario');
+    } else {
+      food['alimentos'] = [];
+      food['metricas'] = [];
+      Map<String, dynamic> data = res['response']['result'];
+      for (var element in data['alimentos']) {
+        food['alimentos'].add("alimento: ${element['menu_nombre']}, calorias: ${element['menu_calorias']}");
+      }
+      food['metricas'].add("ftp: ${data['ftp']}");
+      food['metricas'].add("vo2: ${data['vo2']}");
+      _showResume(context, food);
+    }
+  }
+
+  Future<void> _sendMetrics(incomingData) async {
+    final client = http.Client();
+    dynamic data = {
+      'planId': widget.session.idPlan,
+      'vo2': incomingData['vo2'],
+      'ftp': incomingData['ftp']
+    };
+    dynamic res = await _apiProvider.sendMetric(context, client, data);
+  }
 
   void startSendingMetrics() {
     setState(() {
@@ -53,8 +114,48 @@ class _EventDetailState extends State<EventDetail> {
     });
     if (startButton & timerOnce) {
       timerOnce = false;
+      _startExercice();
+      _startSendingMetrics();
       _startTimer();
     }
+  }
+
+  Future<void> _showResume(BuildContext context, data) {
+    return showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Resumen de la actividad'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+                'Medidas tomadas',
+              style: TextStyle(
+                fontSize: 20
+              ),
+            ),
+            for (var i = 0; i < data['metricas'].length; i++) Text(data['metricas'][i]),
+            const SizedBox(
+              height: 15,
+            ),
+            const Text(
+                'Alimentos recomendados',
+              style: TextStyle(
+                fontSize: 20
+              ),
+            ),
+            for (var i = 0; i < data['alimentos'].length; i++) Text(data['alimentos'][i])
+          ],
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok')
+          )
+        ],
+      );
+    });
   }
 
   Future<void> _showMessage(BuildContext context) {
@@ -83,7 +184,10 @@ class _EventDetailState extends State<EventDetail> {
   }
 
   void stopSession() {
-    exerciseStop = true;
+    setState(() {
+      exerciseStop = true;
+    });
+    _stopExercice();
   }
 
   Timer _startTimer () {
@@ -105,6 +209,29 @@ class _EventDetailState extends State<EventDetail> {
       if (mounted) {
         setState(() {
           seconds--;
+        });
+      }
+    });
+
+    return timer;
+  }
+
+  Timer _startSendingMetrics () {
+    var timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!startButton || exerciseStop) {
+        return;
+      }
+      vo2 = rand.nextInt(50) + 30;
+      ftp = rand.nextInt(50) + 30;
+      dynamic data = {
+        'vo2': vo2,
+        'ftp': ftp
+      };
+      if (mounted) {
+        _sendMetrics(data);
+        setState(() {
+          vo2;
+          ftp;
         });
       }
     });
@@ -166,11 +293,31 @@ class _EventDetailState extends State<EventDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    Text(
+                      'Vo2: $vo2',
+                      style: const TextStyle(
+                          color: Colors.deepPurple,
+                          fontSize: 30
+                      ),
+                    ),
+                    Text(
+                      'Ftp: $ftp',
+                      style: const TextStyle(
+                          color: Colors.deepPurple,
+                          fontSize: 30
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                     ElevatedButton(
                         key: const Key('start_session_btn'),
-                        onPressed: () {
-                          startSendingMetrics();
-                        },
+                        onPressed: exerciseStop ? null : () { startSendingMetrics();},
                         child: startButton ? Text(AppLocalizations.of(context)!.active_session_pause_button) : Text(AppLocalizations.of(context)!.active_session_start_button)
                     ),
                     ElevatedButton(

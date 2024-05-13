@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_movil/src/providers/api_provider.dart';
 import 'package:proyecto_final_movil/src/widgets/screen_size_config.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_final_movil/src/widgets/locale_switcher_widget.dart';
 import 'package:proyecto_final_movil/src/features/menu/dashboard.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_udid/flutter_udid.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -20,6 +20,11 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +51,8 @@ class _LoginFormState extends State<LoginForm> {
 class LoginCustomForm extends StatefulWidget {
   const LoginCustomForm({super.key});
 
+
+
   @override
   LoginCustomFormState createState() {
     return LoginCustomFormState();
@@ -54,8 +61,6 @@ class LoginCustomForm extends StatefulWidget {
 
 class LoginCustomFormState extends State<LoginCustomForm> {
   final ApiProvider _apiProvider = ApiProvider();
-  // final emailTextController = TextEditingController();
-  // final passwordTextController = TextEditingController();
   final _loginForm = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
@@ -63,9 +68,8 @@ class LoginCustomFormState extends State<LoginCustomForm> {
   Future<void> _handleLogin(context) async {
     if (_loginForm.currentState!.validate()) {
       final client = http.Client();
-      final String deviceId = await FlutterUdid.udid;
       dynamic res = await _apiProvider.login(
-          context, client, _email, _password, deviceId);
+          context, client, _email, _password);
 
       if (res['success'] == false) {
         //show error

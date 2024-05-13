@@ -32,7 +32,7 @@ class _CalendarState extends State<Calendar> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
-  late ActiveSession session = ActiveSession(descripcion: '', nombrePlan: '', ejercicios: [], idPlan: '');
+  late ActiveSession session = ActiveSession(descripcion: '', nombrePlan: '', ejercicios: [], idPlan: '', idSession: '');
   Map<DateTime, List<Event>> events = {};
   /*Map<DateTime, List<Event>> events = {
     DateTime.parse('2024-04-20 00:00:00.000Z'): [
@@ -100,7 +100,7 @@ class _CalendarState extends State<Calendar> {
         if (convertedData[DateTime.parse(sessionDate)] == null) {
           convertedData[DateTime.parse(sessionDate)] = [];
         }
-        convertedData[DateTime.parse(sessionDate)]?.add(Event(title: element['estado'], startTime: element['fecha_inicio'], endTime: element['fecha_fin'], planId: element['id_plan_deportista']));
+        convertedData[DateTime.parse(sessionDate)]?.add(Event(title: element['estado'], startTime: element['fecha_inicio'], endTime: element['fecha_fin'], planId: element['id_plan_deportista'], sessionId: element['id_sesion']));
       }
    }
     setState(() {
@@ -108,14 +108,14 @@ class _CalendarState extends State<Calendar> {
     });
   }
 
-  Future<void> getSingleSession(context, planId, state, index) async {
+  Future<void> getSingleSession(context, planId, state, index, sesionId) async {
     if (state == 'finalizada') {
       _showMessage(context, 'Este evento ya ha finalizado');
       return;
     }
 
     final client = http.Client();
-    dynamic res = await _apiProvider.myScheduledSingleSession(context, client, planId);
+    dynamic res = await _apiProvider.myScheduledSingleSession(context, client, planId, sesionId);
 
     if (res['success'] == false) {
       print('error obteniendo la sesion individual para comenzar el ejercicio');
@@ -172,9 +172,12 @@ class _CalendarState extends State<Calendar> {
       totalDuration = total;
     });
 
-    Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => EventDetail(session: session, totalDuration: totalDuration, index:index)));
+    if (!context.mounted) return;
+    print('getting sesions again');
+    getSessions(context);
   }
 
   List<Event> _getEventsForDay(DateTime day) {
@@ -339,7 +342,7 @@ class _CalendarState extends State<Calendar> {
                       ),
                       child: ListTile(
                         onTap: () => {
-                          getSingleSession(context, value[index].planId, value[index].title, index)
+                          getSingleSession(context, value[index].planId, value[index].title, index, value[index].sessionId)
                         },
                         title: Column(
                           children: [

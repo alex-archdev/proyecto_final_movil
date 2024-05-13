@@ -2,13 +2,15 @@ class ActiveSession {
   final String descripcion;
   final String nombrePlan;
   final String idPlan;
+  final String idSession;
   final List<Exercises> ejercicios;
 
   ActiveSession({
     required this.descripcion,
     required this.nombrePlan,
     required this.ejercicios,
-    required this.idPlan
+    required this.idPlan,
+    required this.idSession
   });
   factory ActiveSession.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['ejercicios'] as List;
@@ -17,6 +19,7 @@ class ActiveSession {
         descripcion: parsedJson['descripcion'],
         nombrePlan: parsedJson['nombre_plan'],
         idPlan: parsedJson['id_plan'],
+        idSession: parsedJson['id_sesion'],
         ejercicios: exerciceList
     );
   }

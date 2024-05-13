@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608258303725",
+    "project_id": "proyecto-final-sport-app",
+    "storage_bucket": "proyecto-final-sport-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608258303725:android:45ee9b3e1b30702bbf0ee4",
+        "android_client_info": {
+          "package_name": "com.laad.proyecto_final_movil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfsKCTwCm7RKyKEOs-f53ZQO5zgSVMjsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
