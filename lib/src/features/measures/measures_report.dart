@@ -143,6 +143,7 @@ class _MeasuresReportState extends State<MeasuresReport> {
           ),
           Expanded(
               child: SingleChildScrollView(
+                key: const Key('ftp_dashboard'),
                 scrollDirection: Axis.horizontal,
                 child: AspectRatio(
                   aspectRatio: 2,

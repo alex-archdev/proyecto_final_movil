@@ -224,6 +224,15 @@ void main() {
       await tester.tap(drawer);
 
       await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(find.byKey(const Key('measures')));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.byKey(const Key('ftp_dashboard')), findsOneWidget);
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(drawer);
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
       await tester.tap(find.byKey(const Key('logout')));
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
