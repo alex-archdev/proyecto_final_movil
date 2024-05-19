@@ -11,7 +11,7 @@ import '../features/authentication/login_register.dart';
 
 class ApiProvider {
   static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://k8s-ekssport-sportapp-a5d22e537b-1703746054.us-east-1.elb.amazonaws.com');
-
+  // static const String url = String.fromEnvironment('BASE_URL', defaultValue: 'http://10.0.2.2:5000');
   Future<void> _saveToken(token) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('token', token);
@@ -356,7 +356,52 @@ class ApiProvider {
         case 201:
           result = jsonDecode(response.body);
           jsonResponse = {'success': true, 'response': result};
-          print(jsonResponse['response']);
+          return jsonResponse;
+        case 401:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        case 403:
+          _deletePref(context);
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+        default:
+          jsonResponse = {'success': false, 'response': ''};
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {'success': false, 'response': ''};
+      return jsonResponse;
+    }
+  }
+
+  Future<dynamic> myScheduledEvents(BuildContext context, http.Client client) async {
+    try {
+      var scheduledPlansUrl = "$url/gestor-eventos/eventos/listar";
+      // var scheduledPlansUrl = "http://10.0.2.2:5000/gestor-eventos/eventos/listar";
+      var authToken = await _getToken() ;
+      final response = await client.get(
+          Uri.parse(scheduledPlansUrl),
+          headers: {
+            "content-type" : "application/json",
+            "accept" : "application/json",
+            "authorization": "Bearer $authToken"
+          }
+      );
+      if (!context.mounted) return;
+
+      var code = response.statusCode;
+      log("url: $scheduledPlansUrl");
+      log("status: $code");
+
+      dynamic result, jsonResponse;
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          result = jsonDecode(response.body);
+          jsonResponse = {'success': true, 'response': result};
           return jsonResponse;
         case 401:
           jsonResponse = {'success': false, 'response': ''};

@@ -24,6 +24,7 @@
   "menu_sport_measures": "Statistics",
   "schedule_event_title": "Schedule event",
   "event_description": "Description",
+  "event_place": "Place",
   "event_init_time": "Init time",
   "event_end_time": "End time",
   "event_date": "Date",
@@ -35,5 +36,7 @@
   "vo2_low_title": "Alert vo2",
   "vo2_low_message": "Vo2 is very low",
   "ftp_low_title": "Alert ftp",
-  "ftp_low_message": "Ftp is low try harder"
+  "ftp_low_message": "Ftp is low try harder",
+  "session_title": "Scheduled sessions",
+  "next_event_title": "Scheduled events"
 }

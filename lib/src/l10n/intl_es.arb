@@ -21,9 +21,10 @@
   "menu_sport_plan_page": "Planes deportivos",
   "menu_sport_session_page": "Sesiones deportivas",
   "menu_sport_calendar": "Calendario",
-  "menu_sport_measures": "Estadisticas",
+  "menu_sport_measures": "Estadísticas",
   "schedule_event_title": "Agendar evento",
   "event_description": "Descripcion",
+  "event_place": "Lugar",
   "event_init_time": "Hora de inicio",
   "event_end_time": "Hora de fin",
   "event_date": "Fecha",
@@ -35,5 +36,7 @@
   "vo2_low_title": "Alerta de vo2",
   "vo2_low_message": "Vo2 esta muy bajo",
   "ftp_low_title": "Alerta de ftp",
-  "ftp_low_message": "Ftp esta bajo esfuerzate mas"
+  "ftp_low_message": "Ftp esta bajo esfuerzate mas",
+  "session_title": "Sesiones agendadas",
+  "next_event_title": "Eventos agendados"
 }
